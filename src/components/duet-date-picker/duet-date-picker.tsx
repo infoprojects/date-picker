@@ -25,7 +25,6 @@ import {
   parseISODate,
   createIdentifier,
   DaysOfWeek,
-  createDate,
 } from "./date-utils"
 import { DatePickerInput } from "./date-picker-input"
 import { DatePickerMonth } from "./date-picker-month"
@@ -59,12 +58,8 @@ export type DuetDatePickerChangeEvent = {
   valueAsDate: Date
   value: string
 }
-export type DuetDatePickerFocusEvent = {
-  component: "duet-date-picker"
-}
 export type DuetDatePickerDirection = "left" | "right"
 
-const DISALLOWED_CHARACTERS = /[^0-9\.\/\-]+/g
 const TRANSITION_MS = 300
 
 @Component({
@@ -82,7 +77,6 @@ export class DuetDatePicker implements ComponentInterface {
   private dialogLabelId = createIdentifier("DuetDateLabel")
 
   private datePickerButton: HTMLButtonElement
-  private datePickerInput: HTMLInputElement
   private firstFocusableElement: HTMLElement
   private monthSelectNode: HTMLElement
   private dialogWrapperNode: HTMLElement
@@ -110,25 +104,10 @@ export class DuetDatePicker implements ComponentInterface {
    */
 
   /**
-   * Name of the date picker input.
-   */
-  @Prop() name: string = "date"
-
-  /**
-   * Adds a unique identifier for the date picker input. Use this instead of html `id` attribute.
-   */
-  @Prop() identifier: string = ""
-
-  /**
    * Makes the date picker input component disabled. This prevents users from being able to
    * interact with the input, and conveys its inactive state to assistive technologies.
    */
   @Prop({ reflect: true }) disabled: boolean = false
-
-  /**
-   * Defines a specific role attribute for the date picker input.
-   */
-  @Prop() role: string
 
   /**
    * Forces the opening direction of the calendar modal to be always left or right.
@@ -138,14 +117,9 @@ export class DuetDatePicker implements ComponentInterface {
   @Prop() direction: DuetDatePickerDirection = "right"
 
   /**
-   * Should the input be marked as required?
-   */
-  @Prop() required: boolean = false
-
-  /**
    * Date value. Must be in IS0-8601 format: YYYY-MM-DD.
    */
-  @Prop({ reflect: true }) value: string = ""
+  @Prop({ mutable: true, reflect: true }) value: string = ""
 
   /**
    * Minimum date allowed to be picked. Must be in IS0-8601 format: YYYY-MM-DD.
@@ -189,16 +163,6 @@ export class DuetDatePicker implements ComponentInterface {
   @Event() duetChange: EventEmitter<DuetDatePickerChangeEvent>
 
   /**
-   * Event emitted the date picker input is blurred.
-   */
-  @Event() duetBlur: EventEmitter<DuetDatePickerFocusEvent>
-
-  /**
-   * Event emitted the date picker input is focused.
-   */
-  @Event() duetFocus: EventEmitter<DuetDatePickerFocusEvent>
-
-  /**
    * Component event handling.
    */
   @Listen("click", { target: "document", capture: true })
@@ -234,13 +198,6 @@ export class DuetDatePicker implements ComponentInterface {
   /**
    * Public methods API
    */
-
-  /**
-   * Sets focus on the date picker's input. Use this method instead of the global `focus()`.
-   */
-  @Method() async setFocus() {
-    return this.datePickerInput.focus()
-  }
 
   /**
    * Show the calendar modal, moving focus to the calendar inside.
@@ -330,22 +287,6 @@ export class DuetDatePicker implements ComponentInterface {
     if (event.keyCode === keyCode.ESC) {
       this.hide()
     }
-  }
-
-  private handleBlur = (event: Event) => {
-    event.stopPropagation()
-
-    this.duetBlur.emit({
-      component: "duet-date-picker",
-    })
-  }
-
-  private handleFocus = (event: Event) => {
-    event.stopPropagation()
-
-    this.duetFocus.emit({
-      component: "duet-date-picker",
-    })
   }
 
   private handleTouchStart = (event: TouchEvent) => {
@@ -471,18 +412,6 @@ export class DuetDatePicker implements ComponentInterface {
     this.setYear(parseInt(e.target.value, 10))
   }
 
-  private handleInputChange = (e: InputEvent) => {
-    const target = e.target as HTMLInputElement
-
-    // clean up any invalid characters
-    target.value = target.value.replace(DISALLOWED_CHARACTERS, "")
-
-    const parsed = this.dateAdapter.parse(target.value, createDate)
-    if (parsed || target.value === "") {
-      this.setValue(parsed)
-    }
-  }
-
   private setValue(date: Date) {
     this.value = printISODate(date)
     this.duetChange.emit({
@@ -531,20 +460,11 @@ export class DuetDatePicker implements ComponentInterface {
       <Host>
         <div class="duet-date">
           <DatePickerInput
-            value={this.value}
             formattedValue={formattedDate}
-            onInput={this.handleInputChange}
-            onBlur={this.handleBlur}
-            onFocus={this.handleFocus}
             onClick={this.toggleOpen}
-            name={this.name}
             disabled={this.disabled}
-            role={this.role}
-            required={this.required}
-            identifier={this.identifier}
             localization={this.localization}
             buttonRef={element => (this.datePickerButton = element)}
-            inputRef={element => (this.datePickerInput = element)}
           />
 
           <div

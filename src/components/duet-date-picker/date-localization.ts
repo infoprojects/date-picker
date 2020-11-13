@@ -3,7 +3,6 @@ type DayNames = [string, string, string, string, string, string, string]
 
 export type DuetLocalizedText = {
   buttonLabel: string
-  placeholder: string
   selectedDateMessage: string
   prevMonthLabel: string
   nextMonthLabel: string
@@ -19,7 +18,6 @@ export type DuetLocalizedText = {
 
 const localization: DuetLocalizedText = {
   buttonLabel: "Choose date",
-  placeholder: "YYYY-MM-DD",
   selectedDateMessage: "Selected date is",
   prevMonthLabel: "Previous month",
   nextMonthLabel: "Next month",
