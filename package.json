@@ -1,8 +1,8 @@
 {
-  "name": "@duetds/date-picker",
-  "version": "1.1.0",
-  "description": "Duet Date Picker is an open source version of Duet Design System’s accessible date picker.",
-  "author": "LocalTapiola Services Ltd <duetdesignsystem@lahitapiola.fi>",
+  "name": "@iprox/date-picker",
+  "version": "1.2.0",
+  "description": "@iprox/date-picker is a fork of @duetds/datepicker",
+  "author": "iprox.developer",
   "license": "MIT",
   "module": "dist/index.js",
   "es2015": "dist/esm/index.js",
@@ -14,10 +14,10 @@
   "collection": "dist/collection/collection-manifest.json",
   "repository": {
     "type": "git",
-    "url": "https://github.com/duetds/date-picker.git"
+    "url": "https://github.com/infoprojects/date-picker.git"
   },
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.iphq.nl"
   },
   "directories": {
     "dist": "dist",
@@ -56,9 +56,6 @@
     "node": ">= 12.17.0",
     "npm": ">= 6.14.0"
   },
-  "bugs": {
-    "email": "duetdesignsystem@lahitapiola.fi"
-  },
   "dependencies": {
     "@stencil/core": "^2.3.0"
   },
@@ -67,7 +64,6 @@
     "@stencil/utils": "latest",
     "@types/jest": "26.0.10",
     "@types/jest-image-snapshot": "3.1.0",
-    "@types/puppeteer": "3.0.1",
     "@typescript-eslint/eslint-plugin": "2.13.0",
     "@typescript-eslint/parser": "2.13.0",
     "eslint": "6.8.0",
@@ -80,7 +76,7 @@
     "prettier": "1.19.1",
     "prettier-stylelint": "0.4.2",
     "pretty-quick": "^2.0.1",
-    "puppeteer": "5.2.1",
+    "puppeteer": "10.0.0",
     "sass-lint": "1.13.1",
     "sass-lint-auto-fix": "0.21.2",
     "typescript": "3.9.7"
